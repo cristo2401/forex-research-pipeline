@@ -52,6 +52,13 @@ consistente con:
 No se afirma todavía cuál de estas hipótesis es la causa. Deben probarse sin usar las
 ventanas de 90/120 días como nuevo conjunto de entrenamiento encubierto.
 
+La revisión de fases 9–18.5 también recuperó el diagnóstico histórico de EURGBP
+cercano al 5 % y los resultados positivos posteriores de cartera. No se usan como
+evidencia operativa actual porque el primero contiene observaciones solapadas y los
+segundos no tienen atribución por divisa. Consulta
+[Hallazgos históricos auditados](HISTORICAL_FINDINGS.md) para las cifras, el contraste
+sin solapamiento y los límites de interpretación.
+
 ## Criterios para volver a `GO_PAPER`
 
 La siguiente iteración solo debería habilitar paper-live normal si:

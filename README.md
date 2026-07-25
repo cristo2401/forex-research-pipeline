@@ -35,6 +35,24 @@ evidencia reciente tiene prioridad: el sistema debe seguir en investigación y
 Consulta [Resultados y roadmap](docs/RESULTS_AND_ROADMAP.md) para el detalle, los
 criterios de avance y el trabajo pendiente.
 
+## Hallazgos históricos, con sus límites
+
+Una revisión específica de las fases 9–18.5 recuperó dos resultados que ayudan a
+entender la evolución del proyecto:
+
+- EURGBP registró 5,34 % neto en un diagnóstico nominal de 365 días y costos `x2`,
+  pero las observaciones estaban solapadas; la prueba estricta sin solapamiento fue
+  positiva, aunque bastante menor;
+- la cartera multi-divisa de fase 18.5 registró 15,60 % compuesto después de la
+  simulación cTrader, equivalente de forma aproximada a 5,96 % anual entre sus
+  extremos temporales; no existe una atribución final que permita asignar ese
+  resultado a un solo par.
+
+Son backtests históricos, no PnL real, y no contradicen el estado `PAPER_ONLY` ni el
+fallo posterior de los guardrails. La metodología, las cifras `x1/x2/x3` y las
+limitaciones están documentadas en
+[Hallazgos históricos auditados](docs/HISTORICAL_FINDINGS.md).
+
 ## Arquitectura
 
 ```mermaid
@@ -79,6 +97,7 @@ La navegación completa por fase está en [`phases/`](phases/).
 .
 ├── phases/                  # Código, notebooks y documentación por fase
 ├── docs/
+│   ├── HISTORICAL_FINDINGS.md
 │   ├── RESULTS_AND_ROADMAP.md
 │   └── assets/              # Evidencia visual seleccionada
 ├── .github/workflows/       # Validación estructural y sintáctica
