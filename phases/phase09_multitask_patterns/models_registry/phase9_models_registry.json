@@ -1,0 +1,26 @@
+{
+  "base_models": {
+    "phase9": {
+      "model_pt": "./phases/phase09_multitask_patterns/output_phase9_partial_pattern_GBPUSD/phase9_partial_pattern_model.pt",
+      "summary_json": "./phases/phase09_multitask_patterns/output_phase9_partial_pattern_GBPUSD/GBPUSD_phase9_summary.json",
+      "predictions_csv": "./phases/phase09_multitask_patterns/output_phase9_partial_pattern_GBPUSD/GBPUSD_phase9_test_predictions.csv"
+    },
+    "phase9_1": {
+      "model_pt": "./phases/phase09_multitask_patterns/output_phase9_1_partial_pattern_GBPUSD/phase9_1_partial_pattern_model.pt",
+      "summary_json": "./phases/phase09_multitask_patterns/output_phase9_1_partial_pattern_GBPUSD/GBPUSD_phase9_1_summary.json",
+      "predictions_csv": "./phases/phase09_multitask_patterns/output_phase9_1_partial_pattern_GBPUSD/GBPUSD_phase9_1_test_predictions.csv"
+    }
+  },
+  "hybrid_model": {
+    "name": "phase9_2_hybrid",
+    "gating_source": "phase9_1.pred_inf_prob",
+    "gating_threshold": 0.5,
+    "informative_subclass_source": "phase9.pred_class",
+    "progress_source": "phase9.pred_progress",
+    "outputs": {
+      "summary_json": "./phases/phase09_multitask_patterns/output_phase9_2_hybrid_ensemble_GBPUSD/GBPUSD_phase9_2_summary.json",
+      "predictions_csv": "./phases/phase09_multitask_patterns/output_phase9_2_hybrid_ensemble_GBPUSD/GBPUSD_phase9_2_hybrid_test_predictions.csv",
+      "comparison_csv": "./phases/phase09_multitask_patterns/output_phase9_2_hybrid_ensemble_GBPUSD/GBPUSD_phase9_2_model_comparison.csv"
+    }
+  }
+}

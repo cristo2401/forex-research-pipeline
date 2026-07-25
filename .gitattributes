@@ -1,0 +1,8 @@
+* text=auto
+*.ipynb text
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.parquet binary
+*.pt binary
+*.npz binary

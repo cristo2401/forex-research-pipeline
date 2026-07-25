@@ -1,0 +1,151 @@
+{
+  "version": "phase21_v1_top_engine",
+  "paper_only": true,
+  "live_order_execution": false,
+  "fixed_symbols": ["EURUSD", "GBPUSD", "AUDUSD", "USDCAD", "NZDUSD", "USDCHF", "EURGBP"],
+  "paths": {
+    "root_out_dir": "./phases/phase21_top_engine/output_runs",
+    "phase15_selected7_csv": "./phases/phase15_multi_currency/output_runs/phase15_full_10pairs_20260322_stride8_v1/phase15_selected7.csv",
+    "file_mode_input_root": "./data/parquet_all",
+
+    "phase13_script": "./phases/phase13_pipeline_cli/run_phase13_pipeline.py",
+    "phase14_script": "./phases/phase14_production_hardening/run_phase14_1_hardening.py",
+
+    "phase16_1_script": "./phases/phase16_state_embeddings/run_phase16_1_state_embedding.py",
+    "phase16_2_script": "./phases/phase16_state_embeddings/run_phase16_2_first_cluster.py",
+    "phase16_3_script": "./phases/phase16_state_embeddings/run_phase16_3_context_transformer.py",
+    "phase16_4_script": "./phases/phase16_state_embeddings/run_phase16_4_portfolio_state_dataset.py",
+
+    "phase18_2_script": "./phases/phase18_multi_agent_ctde/run_phase18_2_ctde_robust.py",
+    "phase18_5_script": "./phases/phase18_5_dynamic_leverage/run_phase18_5_dynamic_leverage_ctrader.py",
+
+    "phase19_fetch_script": "./phases/phase19_ctrader_paper_live/run_phase19_fetch_m1_once.py",
+    "ctrader_env_file": "./phases/phase19_ctrader_paper_live/.env"
+  },
+
+  "cost_pips_by_symbol": {
+    "EURUSD": 0.9,
+    "GBPUSD": 1.1,
+    "AUDUSD": 1.0,
+    "USDCAD": 1.1,
+    "NZDUSD": 1.2,
+    "USDCHF": 1.1,
+    "EURGBP": 1.0
+  },
+
+  "fetch": {
+    "account_id": 0,
+    "demo": 1,
+    "count": 0
+  },
+
+  "validation": {
+    "min_rows_per_symbol": 10000,
+    "max_gap_rate": 0.50
+  },
+
+  "strict_eval": {
+    "strict_temporal_eval": 1,
+    "priors_source": "windows_only",
+    "purged_gap_bars": 24,
+    "eval_stride": 8
+  },
+
+  "phase16": {
+    "window_len": 48,
+    "portfolio_window_len": 24,
+    "window_stride": 1,
+    "train_ratio": 0.70,
+    "val_ratio": 0.15,
+    "scaler_mode": "per_symbol",
+    "k": 0,
+    "k_min": 6,
+    "k_max": 16,
+    "seq_len": 32,
+    "k_context": 6,
+    "min_target_symbols": 3,
+    "seed": 42
+  },
+
+  "phase18": {
+    "min_train_windows": 1200,
+    "val_windows": 128,
+    "test_windows": 256,
+    "step_windows": 256,
+    "max_gross_leverage": 6.0,
+    "target_gross_leverage": 3.0,
+    "min_target_mult": 0.2,
+    "max_target_mult": 2.2,
+    "loss_w_turnover": 0.19,
+    "cost_per_turnover": 0.00009,
+    "turnover_smooth_alpha": 0.3,
+    "exec_rebalance_deadband": 0.24,
+    "exec_rebalance_cooldown_bars": 0,
+    "exec_min_turnover": 0.22,
+    "gate_turnover_ratio_max": 0.85,
+    "robust_score_turn_penalty": 1.0,
+    "robust_score_dd_penalty": 0.28,
+    "robust_score_trade_penalty": 0.35,
+    "robust_score_rebalance_penalty": 0.2,
+    "robust_alpha_candidates": "0.15,0.25,0.35,0.45",
+    "robust_cost_multipliers": "2,3",
+    "checkpoint_fold": "last",
+    "checkpoint_seed_mode": "all"
+  },
+
+  "execution": {
+    "policy": "model_ctde_robust",
+    "cost_mult": 1.0,
+    "account_equity_usd": 3000.0,
+    "account_leverage_cap": 10000.0,
+    "max_margin_utilization": 0.35,
+    "leverage_tiers": "1000000:500,5000000:200,inf:100",
+    "extra_cost_per_turnover": 0.00002,
+    "slippage_per_turnover": 0.00002,
+    "shield_dd_limit": -0.08,
+    "shield_risk_mult": 0.55,
+    "min_exec_scale": 0.05
+  },
+
+  "prepare": {
+    "data_source": "ctrader",
+    "lookback_hours": 5760
+  },
+
+  "backtest": {
+    "data_source": "ctrader",
+    "buffer_days": 45
+  },
+
+  "paper_live": {
+    "data_source": "ctrader",
+    "lookback_hours": 4800,
+    "once": 0,
+    "loop": 1,
+    "align_hour": 1,
+    "hour_delay_sec": 20,
+    "poll_interval_sec": 3600,
+    "warmup_hours": 24,
+    "guardrail_stale_hours": 36,
+
+    "normal_max_abs_lev": 0.70,
+    "normal_max_delta_lev_per_step": 0.20,
+
+    "warmup_max_abs_lev": 0.35,
+    "warmup_max_delta_lev_per_step": 0.10,
+
+    "degraded_max_abs_lev": 0.30,
+    "degraded_max_delta_lev_per_step": 0.10,
+
+    "continue_on_error": 1
+  },
+
+  "inference": {
+    "batch_size": 512
+  },
+
+  "retry": {
+    "max": 3,
+    "backoff_sec": 20
+  }
+}

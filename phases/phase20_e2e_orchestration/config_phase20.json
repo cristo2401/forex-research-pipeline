@@ -1,0 +1,52 @@
+{
+  "version": "phase20_v1",
+  "symbol": "GBPUSD",
+  "paper_only": true,
+  "live_order_execution": false,
+  "paths": {
+    "root_out_dir": "./phases/phase20_e2e_orchestration/output_runs",
+    "phase13_script": "./phases/phase13_pipeline_cli/run_phase13_pipeline.py",
+    "phase13_sanity_script": "./phases/phase13_pipeline_cli/run_phase13_sanity_checks.py",
+    "phase14_script": "./phases/phase14_production_hardening/run_phase14_1_hardening.py",
+    "phase19_live_script": "./phases/phase19_ctrader_paper_live/run_phase19_paper_live.py",
+    "phase19_fetch_script": "./phases/phase19_ctrader_paper_live/run_phase19_fetch_m1_once.py",
+    "phase19_env_file": "./phases/phase19_ctrader_paper_live/.env"
+  },
+  "live_h1": {
+    "data_source": "ctrader",
+    "input_m1_file": "./phases/phase13_pipeline_cli/gbpusd_20000530_20251205_dedup_from_phase1.parquet",
+    "account_id": 0,
+    "demo": 1,
+    "phase13_priors_source": "windows_only",
+    "phase13_strict_temporal_eval": 1,
+    "phase13_cost_pips": 1.1,
+    "conf_min": 0.60,
+    "max_abs_lev": 0.70,
+    "max_delta_lev_per_step": 0.20,
+    "daily_loss_limit": 0.0075,
+    "lookback_hours": 2880,
+    "fetch_count": 0,
+    "once": 0,
+    "loop": 1,
+    "align_hour": 1,
+    "hour_delay_sec": 20,
+    "retry_max": 3,
+    "retry_backoff_sec": 15,
+    "phase20_guardrail_stale_hours": 36,
+    "phase20_degraded_max_abs_lev": 0.30,
+    "phase20_degraded_max_delta_lev_per_step": 0.10
+  },
+  "nightly_hardening": {
+    "data_source": "file",
+    "input_m1_file": "./phases/phase13_pipeline_cli/gbpusd_20000530_20251205_dedup_from_phase1.parquet",
+    "account_id": 0,
+    "demo": 1,
+    "lookback_hours": 4320,
+    "fetch_count": 0,
+    "strict_only": 1,
+    "purged_gap_bars": 24,
+    "eval_stride": 8,
+    "retry_max": 3,
+    "retry_backoff_sec": 20
+  }
+}

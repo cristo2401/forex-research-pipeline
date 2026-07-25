@@ -1,0 +1,47 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile Python sources
+        run: python -m compileall -q phases
+
+      - name: Validate JSON files
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          for path in Path(".").rglob("*.json"):
+              with path.open(encoding="utf-8") as handle:
+                  json.load(handle)
+              print(path)
+          PY
+
+      - name: Reject oversized files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          limit = 50 * 1024 * 1024
+          oversized = [
+              (path, path.stat().st_size)
+              for path in Path(".").rglob("*")
+              if path.is_file() and ".git" not in path.parts and path.stat().st_size > limit
+          ]
+          if oversized:
+              for path, size in oversized:
+                  print(f"{path}: {size} bytes")
+              raise SystemExit("Files larger than 50 MiB are not allowed")
+          PY

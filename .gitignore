@@ -1,0 +1,61 @@
+# Credentials and local settings
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Data and generated artifacts
+data/
+data_*/
+**/data/
+**/input_snapshots/
+**/tmp_inputs/
+**/tmp_*/
+**/output/
+**/outputs/
+**/output_*/
+**/output_runs/
+**/runs/
+**/logs/
+**/checkpoints/
+**/checkpoint/
+*.parquet
+*.feather
+*.arrow
+*.npz
+*.npy
+*.pt
+*.pth
+*.pkl
+*.joblib
+*.log
+*.jsonl
+
+# Local reports and transient state
+status.json
+state.json
+manifest.local.json
+paper_decisions.csv
