@@ -1,6 +1,6 @@
 # Forex Research Pipeline
 
-Pipeline experimental, *leak-safe* y multi-divisa para investigar representación de
+Pipeline experimental multi-divisa para investigar representación de
 regímenes de mercado, aprendizaje por refuerzo, asignación de portafolio y ejecución
 simulada sobre datos FX.
 
@@ -15,9 +15,15 @@ simulada sobre datos FX.
 
 ## Estado actual
 
-El proyecto ya implementa el recorrido completo desde datos M1 hasta un motor de
-portafolio con checkpoint congelado, backtest reciente, simulación de ejecución tipo
-cTrader y servicio de *paper trading*.
+Hay código y notebooks desde la preparación M1 hasta prototipos de portafolio,
+simulación cTrader y *paper trading*. **La presencia de 21 fases no significa que
+el sistema completo esté terminado ni validado de extremo a extremo.** Los datos
+y modelos locales necesarios para las fases avanzadas no se distribuyen aquí.
+
+La ruta pública más sencilla para probar el código es la
+[demo sintética de preparación M1→H1](#demo-sin-datos-privados). Consulta
+[Estado y reproducibilidad](docs/STATUS.md) para distinguir código disponible,
+evidencia histórica y validaciones pendientes.
 
 La última evaluación registrada, ejecutada el **25 de marzo de 2026**, terminó
 técnicamente con éxito, pero el resultado financiero fue negativo:
@@ -53,7 +59,10 @@ fallo posterior de los guardrails. La metodología, las cifras `x1/x2/x3` y las
 limitaciones están documentadas en
 [Hallazgos históricos auditados](docs/HISTORICAL_FINDINGS.md).
 
-## Arquitectura
+## Mapa de investigación
+
+El diagrama muestra la organización del trabajo; las flechas no certifican una
+ejecución integrada reproducible desde un clon limpio.
 
 ```mermaid
 flowchart LR
@@ -68,7 +77,7 @@ flowchart LR
     I --> J["Fases 19–21<br/>paper live y guardrails"]
 ```
 
-Principios aplicados a lo largo del flujo:
+Controles presentes en distintos experimentos, cuya cobertura completa aún debe validarse:
 
 - particiones temporales estrictas y *walk-forward*;
 - escaladores, embeddings y clustering ajustados solo con entrenamiento;
@@ -77,17 +86,17 @@ Principios aplicados a lo largo del flujo:
 - límites de leverage, drawdown, turnover y *kill switches*;
 - ejecución exclusivamente simulada.
 
-## Qué está implementado
+## Código disponible y alcance
 
 | Bloque | Fases | Alcance | Estado |
 |---|---|---|---|
-| Datos | 1 | Resample M1→H1, gaps, integridad y manifiestos | Implementado |
-| Representación | 2–6 | Segmentación, embeddings, transferencia, secuencias y regímenes | Implementado |
-| Predicción | 7–9 | Detector online, *next-token*, dos etapas y multitarea | Implementado |
-| Decisión | 10–12 | Motor causal, RL offline y leverage dinámico | Implementado |
-| Robustez | 13–15 | CLI E2E, auditoría temporal, costos y benchmark de 10 pares | Implementado |
-| Portafolio | 16–18 | Estado contextual, meta-portafolio y multi-agente CTDE | Implementado |
-| Ejecución | 18.5–21 | Margen/leverage cTrader, paper-live, guardrails y top engine | Implementado, no aprobado |
+| Datos | 1 | Resample M1→H1, gaps, integridad y manifiestos | Demo sintética ejecutable; cobertura acotada |
+| Representación | 2–6 | Segmentación, embeddings, transferencia, secuencias y regímenes | Notebooks y código experimental |
+| Predicción | 7–9 | Detector online, *next-token*, dos etapas y multitarea | Experimentos; requieren datos y artefactos |
+| Decisión | 10–12 | Motor causal, RL offline y leverage dinámico | Experimentos; validación pendiente |
+| Robustez | 13–15 | CLI, auditoría temporal, costos y benchmark de pares | Inferencia congelada; `retrain_full` no reentrena en v1 |
+| Portafolio | 16–18 | Estado contextual, meta-portafolio y multi-agente CTDE | Resultados históricos; integración pública pendiente |
+| Ejecución | 18.5–21 | Margen/leverage cTrader, paper-live, guardrails y top engine | Prototipos de simulación; guardrails recientes `FAILED` |
 
 La navegación completa por fase está en [`phases/`](phases/).
 
@@ -115,7 +124,25 @@ los 4,1 GB de artefactos locales:
 - credenciales `.env`, tokens OAuth y metadatos de cuenta;
 - cachés, logs y archivos temporales.
 
-## Instalación
+## Demo sin datos privados
+
+Desde la raíz de un clon del repositorio, con Python 3.11:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-demo.txt
+python examples/synthetic_data_demo.py
+```
+
+Genera datos M1 deterministas en un directorio temporal, ejecuta el CLI real de
+fase 1 y verifica OHLCV contra una agregación de referencia, conteo de minutos,
+completitud y detección de un hueco horario. No necesita GPU, modelos ni conexión
+con un broker. Termina con `PASS: synthetic M1 -> H1 checks` y elimina sus archivos
+temporales. No evalúa estrategias ni certifica todas las features o la ausencia de
+fugas de información en las fases posteriores.
+
+## Instalación para los experimentos completos
 
 Se recomienda Python 3.11 o superior y un entorno virtual aislado:
 

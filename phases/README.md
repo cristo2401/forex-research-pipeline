@@ -1,8 +1,13 @@
 # Índice de fases
 
-El repositorio conserva la evolución experimental completa. Las primeras fases son
+El repositorio conserva la evolución del trabajo experimental. Las primeras fases son
 principalmente notebooks; desde la fase 6 se incorporan runners de Python y desde la
-fase 13 el flujo se consolida en CLIs reproducibles.
+fase 13 aparecen CLIs que dependen de modelos y otros artefactos locales.
+
+**Este índice describe propósito, no porcentaje de avance.** Una carpeta o un runner
+no demuestra que la fase esté validada ni que pueda reproducirse desde un clon limpio.
+Consulta [Estado y reproducibilidad](../docs/STATUS.md) y la
+[demo sintética](../README.md#demo-sin-datos-privados) para el alcance verificable.
 
 | Fase | Directorio | Propósito principal |
 |---:|---|---|

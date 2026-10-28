@@ -1,0 +1,4 @@
+# Minimal environment for the deterministic phase-1 demo (Python 3.11).
+numpy==2.2.6
+pandas==2.2.3
+pyarrow==19.0.1
